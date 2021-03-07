@@ -1,0 +1,67 @@
+1. 清空自己的branch  
+git checkout [branchname]  
+git pull  
+删除本地文件夹中pull下来的xxx  
+git add --all  
+git commit -m "del xxx"  
+git push --all  
+  
+2. 上传对应的文件到自己的branch  
+解压缩包把assignment4放到本地文件夹中  
+git add --all  
+git commit -m "version xxx"  
+git push origin [branchname]  
+   
+3. 删除本地冗余分支  
+git remote prune origin  
+  
+4. 解决上传下载流不匹配  
+git branch --unset-upstream    
+git push --set-upstream origin xx    
+  
+5. 远程分支拉到本地  
+git pull origin [branch_name]  
+  
+6. conflict解决方案  
+git pull origin master  
+打开pull下来的文件修改冲突(去掉冲突线)，保存  
+git add filename/--all  
+git commit -m “xxxx”  
+git push origin [branch_name]   
+  
+7. 删除文件夹  
+切换到要删文件夹的分支  
+git rm fileFoldName -r -f  
+git commit -m "delete "  
+git push origin branch_Name  
+  
+8. 切换分支失败  
+git stash  
+  
+9. 退出merging  
+git reset --hard  
+  
+10. 本地找不到网上的分支  
+git pull --all  
+  
+11. 不用每次都输账号密码  
+git config  credential.helper store  
+  
+12. 合并到master  
+git checkout dev  
+git pull  
+git checkout master  
+git merge dev  
+git push -u origin master  
+  
+13. 合并到开发  
+git checkout master   
+git pull   
+git checkout dev  
+git merge master   
+git push -u origin dev  
+  
+14. 删分支  
+git branch -d branchname  
+git push origin --delete [branchname]  
+  

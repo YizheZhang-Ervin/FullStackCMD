@@ -1,0 +1,27 @@
+用户相关命令
+
+useradd -m -g xxusergroup xxuser 加新用户(m指定家目录，g指定所在组)
+passwd xxuser 改密码
+cat /etc/passwd 看所有用户
+id xxuser 查看当前用户信息
+whoami 查看当前用户
+who 查看所有登陆的用户
+su xxuser 用户切换
+su - xxuser 切换用户并到家目录
+userdel -r xxuser 用户连同家目录一起删除
+userdel -f xxuser 强制删用户
+groupadd xx 添加用户组
+cat /etc/group 看用户组
+groupmod -n newname oldname 该用户组名
+groupdel xx 删用户组
+cat /etc/shells 查看shell
+chsh 修改shell
+usermod -g xxgroup xxuser 改初始组
+usermod -G xxgroup,xxgroup xxuser 改附加组
+usermod -S /bin/bash xxuser 改shell
+chmod [ugoa][+-=][rwx] 文件目录权限修改
+chmod -R ### xxfile 改xxfile的所有子文件权限为###
+chown xxuser xxfile 修改xxfile拥有人为xxuser
+chown -R xxuser xxdir 修改xxdir下所有文件拥有人为xxuser
+chgrp xxgroup xxfile 修改xxfile所属组为xxgroup
+chown -R xxgroup xxdir 修改xxdir下所有文件所属组为xxgroup

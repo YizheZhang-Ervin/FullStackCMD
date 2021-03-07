@@ -1,0 +1,512 @@
+1. DDL
+库(创/删)
+
+# 创建数据库
+CREATE DATABASE dbname
+
+# 删除数据库
+DROP DATABASE database_name
+模式(创/删)
+
+# 模式搜索路径 
+SHOW search_path;SET search_path TO 模式名,PUBLIC
+
+# 创建模式
+Create Schema 模式名 Authorization 用户名
+
+# 删除模式
+Drop Schema 模式名 Cascade/Restrict
+表(创/删/改)
+
+# 创建表
+Create Table 表名(列名 数据类型 列级约束条件，表级约束条件);
+*列级约束条件:Primary Key, Unique, Check(), Not Null
+自增字段用AUTO_INCREMENT
+*表级约束条件:Primary Key(列名),Foreign Key(列名) References 表名(列名)
+*外键约束违约处理:On Update/Delete Cascade/No action
+*完整性约束命名:Constraint 约束名 约束条件
+
+# 删除表
+Drop Table 表名 Cascade/Restrict
+
+# 更改表
+Alter Table 表名 操作列/约束
+*列:
+Add Column 列名 数据类型 列级约束
+Drop Column 列名 Cascade/Restrict
+Alter Column 列名 数据类型
+Modify Column 列名 数据类型(modify用于修改列属性)
+*约束:
+Add 表级约束
+Add Constraint 约束名 约束条件
+Drop Constraint 约束名 Cascade/Restrict【默认】
+域(创/改)
+
+# 创建域
+Create Domain 域名 数据类型 约束条件
+Create Domain 域名 数据类型 Constraint 约束名 约束条件
+
+# 更改域
+Alter Domain 域名 Drop Constraint 约束名
+Alter Domain 域名 Add Constraint 约束名 约束条件
+断言(创/删)
+
+# 创建断言
+Create Assertion 断言名 Check子句
+
+# 删除断言
+Drop Assertion 断言名
+视图(创/删)
+
+# 创建/替换视图
+Create OR Replace View 视图名(列名) AS 子查询 With Check Option
+
+# 删除视图
+Drop View 视图名 Cascade
+索引(创/删/改)
+
+# 创建索引
+Create Unique/Cluter Index 索引名 On 表名(列名 ASC/DESC【默认ASC】)
+
+# 删除索引
+Drop Index 索引名
+
+# 更新索引名
+Alter Index 索引名 Rename To 新索引名
+触发器(创/删)
+
+# 创建行级触发器
+Create Trigger 触发器名
+Before/After 触发事件 On 表名
+Referencing New/Old Row As 变量名
+For Each Row
+When 触发条件 触发动作体
+
+# 创建语句级触发器
+Create Trigger 触发器名
+Before/After 触发事件 On 表名
+Referencing New/Old Table As 变量名
+For Each Statement
+When 触发条件 触发动作体
+
+# 删除触发器
+Drop Trigger 触发器名 On 表名
+角色/用户(创)
+
+# 创建用户(非sql标准)
+Create User 用户名 With DBA/Resource/Connect
+
+# 创建角色
+Create Role 角色名
+2. DML
+2.1选择
+
+# Order By + LIMIT
+SELECT column_name(s)
+FROM table_name
+WHERE column_name operator value
+ORDER BY column_name,column_name ASC|DESC
+LIMIT number
+
+# Group by + Having
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name
+HAVING aggregate_function(column_name) operator value
+
+# select into
+SELECT column_name(s)
+INTO new_table_name [IN externaldatabase]
+FROM old_table_name
+
+# 通用
+Select All/Distinct 列表达式 As 别名
+From 表名/视图名
+Where 条件表达式
+Group By 列名 Having 条件表达式
+Order By 列名 ASC/DESC【默认ASC】
+(1)列表达式
+
+*/列名/算数表达式/字符串
+(2)条件表达式
+
+# 比较
+< <= > >= = !=
+
+# 范围 BETWEEN AND
+SELECT column_name(s)
+FROM table_name
+WHERE column_name
+BETWEEN value1 AND value2
+
+# 确定集合 IN
+SELECT column_name(s)
+FROM table_name
+WHERE column_name
+IN (value1,value2,..)
+
+# 字符匹配 LIKE & 通配符
+_ 代表一个字符
+%代表0或多个字符
+[charlist] 在字符列中的任何单一字符
+[^charlist] 不在字符列中的任何单一字符
+SELECT column_name
+FROM table_name
+WHERE column_name LIKE '%value_'
+
+# 空值
+SELECT column_name FROM table_name
+WHERE column_name IS NOT NULL
+
+# 多重条件:运算符AND/OR/NOT
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+AND|OR condition
+(3)单表查询
+
+# 聚集函数
+Count(*) 所有列，含空值
+Count(All/Distinct 列名)
+Sum(All/Distinct 列名)
+Avg(All/Distinct 列名)
+Max(All/Distinct 列名)
+Min(All/Distinct 列名)
+(4)连接查询
+
+# INNER JOIN：如果表中有至少一个匹配，则返回行
+SELECT column_name(s)
+FROM table_name1
+INNER JOIN table_name2
+ON table_name1.column_name=table_name2.column_name
+
+# LEFT JOIN：即使右表中没有匹配，也从左表返回所有的行
+SELECT column_name(s)
+FROM table_name1
+LEFT JOIN table_name2
+ON table_name1.column_name=table_name2.column_name
+
+# RIGHT JOIN：即使左表中没有匹配，也从右表返回所有的行
+SELECT column_name(s)
+FROM table_name1
+RIGHT JOIN table_name2
+ON table_name1.column_name=table_name2.column_name
+
+# FULL JOIN：只要其中一个表中存在匹配，则返回行
+SELECT column_name(s)
+FROM table_name1
+FULL JOIN table_name2
+ON table_name1.column_name=table_name2.column_name
+(5)嵌套查询
+
+# EXISTS
+SELECT column_name(s)
+FROM table_name
+WHERE EXISTS
+(SELECT column_name FROM table_name WHERE condition)
+
+# IN
+SELECT column_name(s)
+FROM table_name
+WHERE 列名 In 子查询
+
+# 比较运算符
+SELECT column_name(s)
+FROM table_name
+WHERE 列名 >/>=/</<=/=/!= 子查询
+
+# Any、All
+SELECT column_name(s)
+FROM table_name
+WHERE 列名 >/>=/</<=/=/!= Any/All 子查询
+(6)集合查询(列数、数据类型相同)
+
+# UNION
+允许重复值UNION ALL，无重复UNION
+SELECT column_name(s) FROM table1
+UNION ALL
+SELECT column_name(s) FROM table2
+
+# INTERSECT
+SELECT column_name(s) FROM table1
+INTERSECT
+SELECT column_name(s) FROM table2
+
+# Except
+SELECT column_name(s) FROM table1
+EXCEPT
+SELECT column_name(s) FROM table2
+(7)派生表查询
+
+Select 列表达式
+From 表名,子查询 As 别名
+(8)空值
+
+# 插入
+Insert Into 表名 Values(NULL)
+
+# 更新
+Update 表名 SET 列名=NULL
+
+# 条件
+Select 列表达式 From 表名 Where 列名 IS Not Null 
+
+# 定义
+列名 数据类型 Not Null
+
+# 比较
+空值比较结果为Unknown
+2.2插入、更新、删除
+
+# 插入 INSERT INTO VALUES
+Insert Into 表名(列名) Values(列值)
+Insert Into 表名(列名) 子查询
+
+# 更新 UPDATE SET WHERE
+Update 表名 Set 列名=表达式 Where 条件/子查询
+
+# 删除 DELETE FROM WHERE
+Delete From 表名 Where 条件/子查询
+
+# 删除 Truncate(删全部数据，不删表结构，不能回滚)
+Truncate Table 表名
+3. DCL
+权限
+
+# 授予权限
+Grant 权限 On 对象类型 对象名 To 用户/角色 With Check Option
+Grant 角色 To 用户/角色 With Check Option
+*With check option不允许循环授权
+*权限: Select(列名)/Update(列名)/Insert(列名)/Delete(列名)/All Privileges
+*对象类型: Table/View等
+*用户:单个/多个/Public
+
+# 收回权限
+Revoke 权限 On 对象类型 对象名 From 用户/角色 Cascade/Restrict
+Revoke 角色 From 用户/角色
+审计
+
+# 设置审计
+Audit 操作 On 表名
+
+# 撤销审计
+Noaudit 操作名 On 表名
+4. 过程化SQL
+变量、常量、控制语句、过程化语句
+
+# 变量
+变量名 数据类型:=初值表达式
+
+# 常量
+常量名 数据类型 Constant:=常量表达式
+
+# 赋值
+变量名:=表达式
+
+# 控制语句
+If 条件 Then 操作;Else 操作; End If;
+Loop 操作 End Loop;
+While 条件 Loop 操作;End Loop;
+For 变量 In 下界 .. 上界 Loop 操作 End Loop;
+
+# 过程化Sql块
+Declare
+    变量名 数据类型;
+    Cursor 游标名(变量名 数据类型) For Sql语句;
+Begin
+    Open 游标名(参数名);
+    Sql语句;
+    控制语句;
+    Commit;
+End;
+存储过程
+
+# 存储过程
+Create Or Replace Procedure 过程名(参数名) As 过程化Sql块
+
+# 调用
+Call/Perform Procedure 过程名(参数);
+
+# 更改
+Alter Procedure 过程名 Rename To 过程名;
+Alter Procedure 过程名 Compile;
+
+# 删除
+Drop Procedure 过程名();
+函数
+
+# 创建
+Create Or Replace Function 函数名(参数) Returns 类型 AS 过程化Sql块;
+
+# 调用
+Call/Select 函数名(参数);
+
+# 更改
+Alter Function 过程名 Rename To 过程名;
+Alter Function 函数名 Compile;
+5. 数据类型
+5.1Text类型:
+
+CHAR(size)最多 255 个字符
+VARCHAR(size)最多 255 个字符
+TINYTEXT最大长度为 255 个字符
+TEXT最大长度为 65,535 个字符
+BLOB（Binary Large OBjects）存放最多 65,535 字节
+MEDIUMTEXT存放最大长度为 16,777,215 个字符
+MEDIUMBLOB （Binary Large OBjects）存放最多 16,777,215 字节
+LONGTEXT存放最大长度为 4,294,967,295 个字符
+LONGBLOB(Binary Large OBjects)存放最多 4,294,967,295 字节
+ENUM(x,y,z,etc.)可以在 ENUM 列表中列出最大 65535 个值。如果列表中不存在插入的值，则插入空值(SET 最多只能包含 64 个列表项且 SET 可存储一个以上的选择)
+5.2Number类型:
+
+TINYINT(size)带符号-128到127 ，无符号0到255
+SMALLINT(size)带符号范围-32768到32767，无符号0到65535, size 默认为 6
+MEDIUMINT(size)带符号范围-8388608到8388607，无符号的范围是0到16777215，size 默认为9
+INT(size)带符号范围-2147483648到2147483647，无符号的范围是0到4294967295，size 默认为 11
+BIGINT(size)带符号的范围是-9223372036854775808到9223372036854775807，无符号的范围是0到18446744073709551615，size 默认为 20
+FLOAT(size,d)带有浮动小数点的小数字，在 size 参数中规定显示最大位数，在 d 参数中规定小数点右侧的最大位数
+DOUBLE(size,d)带有浮动小数点的大数字，在 size 参数中规显示定最大位数，在 d 参数中规定小数点右侧的最大位数
+DECIMAL(size,d)作为字符串存储的 DOUBLE 类型，允许固定的小数点，在 size 参数中规定显示最大位数，在 d 参数中规定小数点右侧的最大位数。
+5.3Date 类型：
+
+DATE()日期格式：YYYY-MM-DD，注释：支持的范围是从 '1000-01-01' 到 '9999-12-31'
+DATETIME()日期和时间的组合格式：YYYY-MM-DD HH:MM:SS，注释：支持的范围是从 '1000-01-01 00:00:00' 到 '9999-12-31 23:59:59'
+TIMESTAMP() *时间戳TIMESTAMP 值使用 Unix 纪元('1970-01-01 00:00:00' UTC) 至今的秒数来存储。格式：YYYY-MM-DD HH:MM:SS，注释：支持的范围是从 '1970-01-01 00:00:01' UTC 到 '2038-01-09 03:14:07' UTC
+TIME()时间格式：HH:MM:SS，注释：支持的范围是从 '-838:59:59' 到 '838:59:59'
+YEAR()2 位或 4 位格式的年，注释：4 位格式所允许的值：1901 到 2155。2 位格式所允许的值：70 到 69，表示从 1970 到 2069。
+6. 函数
+6.1日期
+
+NOW()返回当前的日期和时间
+CURDATE()返回当前的日期
+CURTIME()返回当前的时间
+DATE()提取日期或日期/时间表达式的日期部分
+EXTRACT()返回日期/时间的单独部分
+DATE_ADD()向日期添加指定的时间间隔
+DATE_SUB()从日期减去指定的时间间隔
+DATEDIFF()返回两个日期之间的天数
+DATE_FORMAT()用不同的格式显示日期/时间
+6.2 NULL
+
+IFNULL(UnitsOnOrder,0)
+COALESCE(UnitsOnOrder,0)
+6.3 其他
+
+AVG() - 返回平均值
+COUNT() - 返回行数
+FIRST() - 返回第一个记录的值
+LAST() - 返回最后一个记录的值
+MAX() - 返回最大值
+MIN() - 返回最小值
+SUM() - 返回总和
+UCASE() - 将某个字段转换为大写
+LCASE() - 将某个字段转换为小写
+MID() - 从某个文本字段提取字符，MySql 中使用
+SubString(字段，1，end) - 从某个文本字段提取字符
+LEN() - 返回某个文本字段的长度
+ROUND() - 对某个数值字段进行指定小数位数的四舍五入
+NOW() - 返回当前的系统日期和时间
+FORMAT() - 格式化某个字段的显示方式
+7. 约束
+NOT NULL - 某列不能存储 空值。
+UNIQUE - 某列的每行必须有唯一的值。
+PRIMARY KEY - NOT NULL 和 UNIQUE 的结合。确保某列（或两个列多个列的结合）有唯一标识，有助于更容易更快速地找到表中的一个特定的记录。
+FOREIGN KEY - 保证一个表中的数据匹配另一个表中的值的参照完整性。
+CHECK - 保证列中的值符合指定的条件。
+DEFAULT - 规定没有给列赋值时的默认值。
+# 综合版1
+CREATE TABLE t1
+(c1 int NOT NULL PRIMARY KEY,
+ c2 varchar(255) UNIQUE CHECK (c2>0),
+ c3 varchar(255) DEFAULT 'vals',
+ c4 int
+)
+
+# 综合版2
+CREATE TABLE t2
+(c1 int NOT NULL,
+ c2 varchar(255) UNIQUE,
+ c3 varchar(255),
+ c4 int
+ CHECK (c2>0)
+ PRIMARY KEY (c1)
+ UNIQUE(c2)
+ FOREIGN KEY (c4) REFERENCES t1(c1)
+)
+
+# 综合版3
+CREATE TABLE t3
+(c1 int NOT NULL,
+ c2 varchar(255) UNIQUE,
+ c3 varchar(255),
+ c4 int
+ CHECK (c2>0)
+ UNIQUE(c2)
+ CONSTRAINT pk_cid PRIMARY KEY (c1,c2)
+ CONSTRAINT fk_cid FOREIGN KEY (c4) REFERENCES Persons(c1)
+)
+
+# 给列添加NOT NULL
+ALTER TABLE t4
+MODIFY column1 NOT NULL
+
+# 给列删除NOT NULL
+ALTER TABLE t4
+MODIFY column1 int NULL
+
+# 给列添加UNIQUE
+ALTER TABLE t4
+ADD UNIQUE (c1)
+
+# 给多列添加UNIQUE
+ALTER TABLE t4
+ADD CONSTRAINT uc_cid UNIQUE (c1,c2)
+
+# 给列删除UNIQUE
+ALTER TABLE t4
+DROP INDEX uc_cid
+
+# 给列添加PRIMARY KEY
+ALTER TABLE t4
+ADD PRIMARY KEY (c1)
+
+# 给多列添加PRIMARY KEY
+ALTER TABLE t4
+ADD CONSTRAINT pk_PersonID PRIMARY KEY (c1,c2)
+
+# 给列删除PRIMARY KEY
+ALTER TABLE t4
+DROP PRIMARY KEY
+
+# 给多列添加FOREIGN KEY
+ALTER TABLE t4
+ADD FOREIGN KEY (c1) REFERENCES t1(c1)
+
+# 给列添加FOREIGN KEY
+ALTER TABLE t4
+ADD CONSTRAINT fk_cid FOREIGN KEY (c1) REFERENCES t1(c1)
+
+# 给列删除FOREIGN KEY
+ALTER TABLE t4
+DROP FOREIGN KEY fk_cid
+
+# 给列添加CHECK
+ALTER TABLE t4
+ADD CHECK (c1>0)
+
+# 给列添加CHECK
+ALTER TABLE t4
+ADD CONSTRAINT chk_c2 CHECK (c2>0 AND c3='ABC')
+
+# 给列删除CHECK
+ALTER TABLE t4
+DROP CHECK chk_c2
+
+# 给列添加DEFAULT
+ALTER TABLE t4
+ALTER c4 SET DEFAULT 'ABC'
+
+# 给列删除DEFAULT
+ALTER TABLE t4
+ALTER c4 DROP DEFAULT

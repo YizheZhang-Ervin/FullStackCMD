@@ -1,0 +1,16 @@
+目录相关命令
+
+pwd 显示当前路径
+ls -l (或ll) 列表形式显示(长格式)
+ls -a 显示所有(含隐藏文件)
+ls -lh 长格式+文件大小可读性
+ls -li 列表及文件id显示
+ls /xx 查看xx中内容
+ls *.txt 列出任意0或多个字符的txt文件
+ls ?.txt 列出任意1个字符的txt文件
+ls [abc] 列出括号中任意一个字符的文件
+ls >xxfile 输出到xxfile
+ll > xxfile 长列表输出到xxfile
+cd ~ 或 cd 回到家目录
+cd path 到相对路径/绝对路径
+cd - 切换到上一个目录

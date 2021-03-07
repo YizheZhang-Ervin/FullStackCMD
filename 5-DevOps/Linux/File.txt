@@ -1,0 +1,38 @@
+文件相关命令
+
+touch xx 创建文件
+mkdir xx 创建文件夹
+rm -d xx 移除空文件夹
+rm -r xx 移除文件夹内所有
+rmdir xx 移除文件夹
+rmdir -p xx/yy yy删后xx空则xx也删除
+mv xx dira 移动文件xx到dira
+mv xx ./yy 文件xx改名yy 
+cp xx dira 复制xx到dira
+cp -r dira/dirb 复制目录dira到dirb
+cp xx yy 复制xx并以yy命名
+find /dira -name xx 按文件名精确搜索
+find /dira -name xx* 按文件名模糊搜索
+find /dira -iname xx 按文件名不分大小写搜索
+find /dira -user xx 按用户精确搜索
+find /dira -mmin xx 按时间精确搜索 (mmin上次修改时间，amin上次访问时间，cmin上次属性权限修改时间，-5=5分钟内，+5=超过5分钟)
+find /dira -type xx 按文件类型搜索(f文件/d目录/l软链接文件)
+find /dira -inum xx 按id搜索
+*find的多条件搜索用-a(可不写)表示同时满足，-o表示或者
+locate xx 查路径及文件(sudo updatedb更新索引库)
+cat xx 查看文件
+more xx 分页查看文件(空格下一页,B上一页)
+cat -b xx 查看带行号不算空行
+cat -n xx 查看带行号算空行
+grep -n xx yy 在yy里搜xx内容并显示行号
+grep -v xx yy 在yy里搜不含xx的行
+grep ^'#' xx 在xx里搜#开头的内容
+grep s$ xx 在xx里搜以s结尾的内容
+grep -i xx yy 在yy里搜含xx的行(不分大小写)
+(管道) ls -lh | grep xxfile 以长格式及文件大小可读性方式显示并查xxfile
+(管道) grep -v ^'#' xxfile | more 查文件中以#开头的字符以分页形式显示
+echo xx 输出在控制台
+echo xx >xxfile 输出覆盖xxfile文件
+echo xx >> xxfile 输出追加到xxfile文件
+ln xxfile xxlink 文件xxfile的软链接xxlink
+ln xxdir xxlink 文件夹xxdir的软链接xxlink

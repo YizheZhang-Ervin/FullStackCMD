@@ -1,0 +1,12 @@
+帮助/命令
+
+查看指定帮助：man xx / xx --help / info xx
+可以打印出所有支持的命令列表:compgen ­-c
+显示出这个命令的用法简要: whatis
+查找命令的可执行文件:whereis/which(只可查可执行文件)
+
+看用过的命令列表: history
+已执行过的命令的完整路径: hash
+
+命令进行取别名: alias
+给命令绑定一个宏或者按键: bind

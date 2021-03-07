@@ -1,0 +1,45 @@
+Broker
+启动
+bin/kafka-server-start.sh --daemon config/server.properties
+1
+启动kafka命令加上–daemon，那么kafka会以守护进程的方式启动
+
+查看启动是否成功
+jps -l
+
+停止
+bin/kafka-server-stop.sh config/server.properties
+1
+启动多个broker
+bin/kafka-server-start.sh --daemon config/server1.properties
+bin/kafka-server-start.sh --daemon config/server2.properties
+bin/kafka-server-start.sh --daemon config/server3.properties
+
+Topic
+新建
+bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic demo --partitions 10 --replication-factor 3
+
+查看所有topic列表
+bin/kafka-topics.sh --zookeeper localhost:2181 --list
+
+查看指定topic明细
+bin/kafka-topics.sh --zookeeper localhost:2181 --desc --topic demo
+bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic demo2 --partitions 10 --replication-factor 2
+
+修改
+下面命令，增加partion数量，从10个partition增加到20个
+bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic demo --partitions 20
+
+删除
+删除之前，需要先将server.properties文件中的配置delete.topic.enable=true更改一下，否则执行删除命令不会生效。
+bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic demo
+
+Producer
+这个比较简单，执行下面命令就可以生产数据了
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic demo
+
+Consumer
+同样地这个也比较简单，执行下面命令就可以消费数据了
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic demo
+如果加上from-beginning指定从第一条数据开始消费
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic demo --from-beginning

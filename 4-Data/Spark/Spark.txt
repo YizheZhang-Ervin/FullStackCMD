@@ -1,0 +1,58 @@
+su hdfs
+spark-shell
+
+1. 创建DataFrames
+1.1 创建了一个数据集，实现了并行化
+val seq= Seq(("1","xiaoming",15),("2","xiaohong",20),("3","xiaobi",10))
+var rdd1 = sc.parallelize(seq)
+1.2 将当前的rdd对象转换为DataFrame对象(数据信息和数据结构信息存储到DataFrame)
+val df = rdd1.toDF("id","name","age")
+
+2.查询数据
+2.1 DSL风格
+(1)基本
+df.select("name").show
+df.select("name","age").show
+
+(2)条件过滤
+df.select("name","age").filter("age >10").show
+//参数必须是一个字符串，filter中的表达式也需要时一个字符串
+
+(3)参数是类名col (“列名”)
+df.select(“name”,“age”).filter(col(“age”) >10).show
+
+(4)分组统计个数
+df.groupBy("age").count().show()
+
+(5)打印DataFrame结构信息
+df.printSchema
+
+2.2 SQL风格
+(1)将DataFrame注册成表,注册方式如下
+df.registerTempTable("xxTable")
+// 表示 将DataFrame成xxTable表
+
+(2)查询
+spark.sql("select * from ").show
+
+(3)显示表的Schema信息
+spark.sql("desc xxTable").show
+
+2.3 Dataset风格
+(1)转化
+DataFrame转为 DataSet: df.as[ElementType]这样可以把DataFrame转化为DataSet。
+DataSet转为DataFrame: ds.toDF()这样可以把DataSet转化为DataFrame。
+
+(2)创建DataSet
+(2-1)通过spark.createDataset创建
+val ds = spark.createDataset(1 to 10)
+
+(2-2)通过toDS方法生成DataSet
+定义一个类
+case class Person(name:String,age:Long)
+定义一个类的集合
+val data = List(Person("zhangsan",20),Person("lisi",30))
+转成DS
+val ds = data.toDS
+查看DS
+ds.show 

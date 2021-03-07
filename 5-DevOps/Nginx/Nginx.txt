@@ -1,0 +1,10 @@
+使用命令的前提条件，必须进入/usr/local/nginx/sbin目录  
+(1)查看版本  
+在/usr/local/nginx/sbin 目录下执行 ./nginx -v  
+(2)启动nginx  
+在/usr/local/nginx/sbin 目录下执行 ./nginx  
+(3)关闭nginx  
+在/usr/local/nginx/sbin 目录下执行 ./nginx -s stop  
+(4)重加载nginx  
+在/usr/local/nginx/sbin 目录下执行 ./nginx -s reload  
+  

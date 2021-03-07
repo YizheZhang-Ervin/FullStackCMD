@@ -1,0 +1,34 @@
+目录文件相关:
+
+当前目录: ./
+上层目录: ../
+主目录: ~/
+切换目录(change directory): cd
+查看当前路径(print working directory): pwd
+创建目录(make directory): mkdir
+
+列出目录文件(list): ls -a / -l
+查看文件:vi/cat/more/less/tail/head
+分页查看大文件: cat file | more
+创建文件: touch/vi
+写文件:vi
+移动文件(move): mv
+复制文件(copy): cp
+删除文件(remove): rm/rmdir
+文件权限修改(change mode): chmod mode file
+
+终端: /dev/tty
+黑洞: /dev/null
+
+显示目录或文件的大小: du
+显示每个文件所在的文件系统的信息: df
+打印出当前的目录栈: dirs
+搜索文件: find dir condition action
+
+软链接(link files): ln -s xxlink source
+硬链接(link files): ln link source
+
+
+
+
+
