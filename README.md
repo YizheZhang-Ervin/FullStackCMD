@@ -16,5 +16,5 @@ SQL/Mysql/Sqlite/MongoDB
 Redis/Memcached  
   
 ## DevOps  
-Linux/Docker/K8S/Nginx/Webpack/Git  
+Linux/Shell/Docker/K8S/Nginx/Webpack/Git  
   
