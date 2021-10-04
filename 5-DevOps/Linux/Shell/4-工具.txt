@@ -1,0 +1,58 @@
+# cut
+1.按列切分，提取列/字符/字节
+cut 操作 文件名
+操作：f列号/d自定义分隔符/c字符为单位分割/b字节为单位分割/n不分割多字节字符
+提取范围：n-/n-m/-m/n1,n2
+2. 切割提取指定单词数据： cat|grep|cut
+3.切割进程：ps|grep|head|cut
+4.切割IP：ifconfig|grep|cut
+
+# sed流编辑器(CRUD)
+行放入缓存(模式空间)，模式匹配->符合就处理，进下一行，最后发到终端
+编辑文件替换文件中单词，插入修改行，过滤管道数据命令
+sed 选项参数 模式匹配/sed程序命令 文件名
+选项参数：e指令列模式上动作编辑/i直接对内容修改/f保存sed指令的文件/n取消默认输出/r扩展正则表达式
+sed程序命令：a增/c改/d删/i插/p打印/s替换/=行号/n读下一行
+sed '3ahello' xx.txt 第三行加上hello
+sed '1~2d' xx.txt 删奇数行
+sed '1,3!d' xx.txt 删多行(非1-3行)数据
+sed '/xx/,$d' xx.txt 删匹配行到最后一行
+sed '/xx/,+1d' xx.txt 删匹配行及后一行
+sed '1chello' xx.txt 改第一行
+sed 's/xx/hello/g' xx.txt 所有替换
+sed 's/xx/hello/2' xx.txt 替换第二个
+sed -n 's/xx/hello/2pw' -n和p只打印替换的行
+sed '/i/s/t.*//' xx.txt 匹配有i的行，替换匹配行中t后的所有内容为空
+sed 's/$/& test/' xx.txt 每行末尾拼接字符
+sed 's/^/&#/' 每行行首加注释
+sed -n '/xx/p' xx.txt 查询含有xx的行
+ps -aux | sed -n '/xx/p'管道过滤查询
+sed -e "命令1" -e "命令2" 或 sed '命令1;命令2' 执行多个命令
+模式空间：读出来的行放这里
+暂存空间：初始为空
+h模式覆盖暂存/H模式追加暂存/g暂存覆盖模式/G暂存追加模式/x交换模式和暂存
+sed "1h;$G" xx.txt 第一行粘贴到最后一行
+sed "1{h;d};$G" xx.txt第一行删除后粘到最后一行
+sed "1h;2,$g" xx.txt 第一行数据复制粘贴替换其他行数据
+sed "1,3H;$G" xx.txt 前三行复制到最后一行
+sed -i "G" xx.txt 给每一行加空行
+sed -i '/^$/d' xx.txt去掉所有空行
+
+# awk文本分析
+awk 选项参数 '匹配模式{命令}' {文件}
+选项参数: F指定输入文件拆分分隔符/v赋值一个用户定义变量
+内置变量: ARGC/ARGV/ENVIRON/FILENAME/FNR/FS/NF/NR/OFS/ORS/RS/$n/$NF
+echo "1 2" | awk '{print $1"&"$2}' xxFile
+awk -F: '{printf("%s,%s,%s,%s",FILENAME,NR,NF,$0)}' xxFile 统计信息
+awk -F: '{print $(NF-1)}' xxFile 打印倒数第二列
+awk -F: '{if(NR>=10 && NR<=20){print $1}}' xxFile 打印10到20行的第一列
+echo -e "abc" | awk 'BEGIN{print "开始"}{print $0}END{"结束"}'
+echo "1 2 3" | awk -v str="" 'for(n=1;n<=NF;n++){str=str$n}' 循环拼接
+echo "2.1" | awk -v i=1 '{print $0+i}' 加一
+
+# sort
+对字符串/数字/多列 升序/降序排列
+sort 选项 文件列表
+选项: n按数值大小排序/r/t分隔字符/k列/d/f/b/o/u去重/m
+sort -t " " -k2n,2 -uk1,2 -o yy.txt xx.txt 按第二列数值升序去排列输出到yy
+sort -t "," -k1,1 -k3nr,3 xx.txt 逗号分隔对第一列字符升序，第三列数字降序

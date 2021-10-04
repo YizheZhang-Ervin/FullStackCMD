@@ -1,0 +1,86 @@
+# 输入输出重定向
+默认输入输出文件：stdin-0/stdout-1/stderr-2
+重定向: 命令>file覆盖方式把正确数据重定向输出到file中
+命令<file读取
+命令>>file追加方式把正确数据重定向输出到file中
+命令<file1>file2从1中读写入2
+命令 文件描述符(0/1/2)>file数据重定向输出
+命令 > file 文件描述符1(0/1/2)>&文件描述符2(0/1/2)    合并输出到文件
+命令<& 文件描述符(0/1/2)   合并输入
+<<tag 读取终端输入数据(tag之间的内容)
+
+
+
+
+# 流程控制
+1.判断
+判断语句的退出状态：每个条件的退出状态(0成功/1失败)+逻辑运算符组合
+(1)if else
+if $var1 == $var2
+then
+    echo "yes"
+else
+    echo "no"
+fi
+---或---
+if  条件
+then
+    命令
+elif  条件
+then
+    命令
+else
+    命令
+fi
+---或---
+单行if 条件;then 命令;else 命令;fi;
+(2)case
+匹配模式*任意,[abc]三个中任意,[m-n]范围中任意,|多重选择
+case 值 in 
+匹配模式1)
+    命令
+    ;;
+匹配模式2)
+    命令
+    ;;
+*)
+    命令
+    ;;
+esac
+
+2.循环
+(1)while
+while 条件
+do
+    命令
+    continue;
+    break;
+done
+---或---
+单行写法 while 条件;do 命令;done;
+(2)until (条件true停止循环)
+until 条件
+do
+    命令
+done
+(3)for
+列表变量可为：1 2 3 或者{start..end},如{1..3}
+for var in 列表变量
+do 
+命令
+done
+---或---
+单行写法for var in 列表变量;do 命令;done;
+---或---
+for((i=start;i<=end;i++))
+do
+    命令
+done
+---或---
+单行写法for((i=start;i<=end;i++));do 命令;done;
+(4)select交互式输入菜单
+select xxVar in menu1 menu2
+do
+    命令
+    break
+done

@@ -1,0 +1,130 @@
+# 文件名: test.sh
+
+# 首行设置bash解析器类型
+#!/bin/bash
+
+# 系统解析器类型
+echo $SHELL
+
+# 文件(创/改/看)
+创建目录mkdir xxDir
+创建文件touch xx.sh
+编辑vim xx.sh
+输出数据到文件 echo xxData >> xx.txt
+看内容cat xx.sh
+
+# 文件(执行-多命令处理)
+sh解析器执行sh 相对路径(绝对路径)/xx.sh
+bash解析器执行 bash 相对路径(绝对路径) xx.sh
+路径执行(得有可执行权限) 相对路径(绝对路径)/xx.sh
+添加可执行权限 chmod a+x xx.sh
+
+# 环境变量
+查看系统环境变量env
+查看所有(系统/自定义/函数)环境变量set
+1.系统环境变量(系统级/用户级)
+(1)全局配置文件/etc/profile和/etc/profile.d/*.sh和/etc/bashrc
+vim中G快速定位文件末尾，gg定位首行
+重载配置文件 source xx
+(2)个人配置文件/.bash_profile和/.bashrc
+(3)常用：PATH/HOME/SHELL/HISTFILE(执行命令的历史列表)/PWD/OLDPWD/HOSTNAME/HOSTTYPE/LANG
+2.自定义变量
+(1)自定义局部变量(一个文件中使用)
+var_name=value(无空格，默认字符串无法数值运算，有空格要用双引号)
+查询 $var_name 或 ${var_name}适合拼接字符串
+删除 unset var_name
+(2)自定义常量
+readonly var_name
+(3)自定义全局变量
+export var_name1 var_name2=value
+3.特殊符号变量
+(1)$1~$9获取传入的参数  调用sh xx.sh param1 param2 取值$1 $2
+10以上参数为${数字}
+(2)$# 获取输入参数的个数
+(3)$* $@ 获取所有输入参数【如果使用双引号"$*"所有参数拼为一个字符串，"$@"参数列表对象】
+(4)$? 获取上一个命令退出状态码(0成功非0失败)，或者函数返回值
+(5)$$ 获取当前shell环境进程编号
+
+# shell工作环境
+(1)交互式/非交互式
+(2)登录shell(系统profile+*.sh->用户bash_profile+bashrc->系统bashrc)/非登录shell(用户bashrc->系统bashrc+*.sh)
+登录一般配在profile和bash_profile,非登录配在bashrc和etc/bashrc
+(3)切换shell环境执行脚本文件
+登录: sh/bash --login xx.sh
+非登录: bash 然后 sh/bash xx.sh
+(4)环境识别
+echo $0 (-bash登录环境，bash非登录环境)
+切换为非登录环境 bash
+切换用户登录环境 su 用户名 --login 
+切换用户非登录环境 su 用户名
+
+# 内置命令
+(1)type xx 判断是否是内置命令
+(2)alias 别名="命令"
+unalias 别名 删某个别名/加-a删所有
+(3)echo 字符串/加-n不换行/加-e解析换行符(\n)及清楚结尾的换行(\c)
+(4)读取控制台标准输入
+read -options var_name 不加变量名存到REPLY变量中(options可以是-a/-d/-e/-n/-p/-r/-s/-t/-u)
+read -p "提示信息" var1 var2/加-n 1 限制读取一个字符
+read -t 20 -sp "提示信息" var1
+(5)exit 数字 退出环境返回状态码(0成功，非0(0-255)失败)
+结束shell进程/shell执行出错(错误码表示错误，用于不同业务处理)
+(6)declare +/- aArxif 变量名称=变量值 用于设置变量属性
+a数组/A关联数组/r只读/x全局变量/i整型变量/f函数变量
+declare -A var_name=([str_key]=value1 [str_key2]=value2)关联数组必须用declare定义
+
+# 计算命令
+1.expr 【引用变量用$,特殊字符要转义】
+求值
+字符串操作:
+长度：expr length 字符串
+截取：expr substr 字符串 start end
+查找：expr index 被查找字符串 要查的字符
+正则匹配：expr match 字符串 正则表达式      或      expr 字符串:正则表达式
+2.((表达式))  【引用变量直接用变量名，特殊字符不用转义】
+自动给变量赋值((a=1+1,b=2+a))
+获取执行结果a=$((1+1))
+3.let用于整数运算赋值【引用变量直接用变量名，特殊字符不用转义】
+let a=1+1 b=2+2
+4.$[表达式]用于单个表达式整数数学运算【引用变量直接用变量名，特殊字符不用转义】
+a=$[1+1]
+5.bc支持浮点运算
+bc 操作 参数
+操作-h/-v/-l/-i/-w/-s/-q(进环境)
+内置变量: scale精度，输入进制ibase，输出进制obase，last或者. 获取最近打印结果的数字
+内置数学函数: 得用-l s(x),c(x),a(x),l(x),e(x),j(n,x)
+(1)互动式数学运算
+(2)非互动式管道运算
+xxvar=`echo 表达式 | bc 操作` 或 xxvar=$(echo 表达式 | bc 操作)， 表达式中可引用shell变量
+反引号兼容性好但容易混淆
+(3)非互动式输入重定向运算 
+`bc 操作 << EOF
+表达式
+表达式
+EOF
+`
+---或---
+$(bc 操作 << EOF
+表达式
+表达式
+EOF
+)
+
+# 内置命令
+1. test
+(1)对整数比较测试
+test 数字1 操作 数字2
+操作: eq/ne/gt/ge/lt/le
+(2)对字符串测试
+test 变量1 操作 变量2
+操作: ==或=/!=/\</\>/z/n
+(3)对文件测试
+test 操作 文件路径字符串
+操作: e/r/w/x/s/d/f/c/b
+
+# 切换用户
+useradd -m xxUser
+
+#wc统计文本
+wc 操作 文件名
+操作:c字节数/w单词数/l行数

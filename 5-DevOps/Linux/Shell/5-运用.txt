@@ -1,0 +1,111 @@
+# 查空行
+awk '/^$/{print NR}' xx.txt
+
+# 求第二列的和
+awk '{sum+=$2} END{sum}' xx.txt
+
+# 检查文件是否存在
+if [-e xx.txt];then echo 'exists';else echo 'not exists';fi;
+
+# 数字排序及求和
+sort -n xx.txt | awk "{sum+=$1;print $1}END{print sum}"
+
+# 搜索指定目录下内容
+grep -r "xxContent" /xxDir | cut -d ":" -f 1 | sort -u
+
+# 批量生成文件名
+read -t 30 -p "输入文件数" n
+test=$(echo $n | sed 's/[0-9]//g')  # 检测非数字输入(数字全换位空)
+if [ -n "$n" -a -z "$test"]   # 检测空输入
+then
+    for ((i=0;i<$n;i++))
+    do
+        name=$(date+%N)  # 纳秒时间
+        [!-d ./temp] && mkdir -p ./temp
+        touch "./temp/$name"
+        echo "create succeed"
+    done
+else 
+    echo "create fail"
+    exit 1
+fi
+
+# 批量改名(rename 旧名 新名 文件位置)
+filenames=$(ls /root/temp)
+number=1
+for name in $filenames
+do
+    printf "%s" ${name}
+    newname=${name}"-"${number}
+    rename $name ${newname} /root/temp/*
+    let number++
+    printf "%s" ${newname}
+done
+
+# 批量创建用户
+ULIST=${cat /root/users.txt}
+for UNAME in ULIST
+do
+    useradd $UNAME
+    echo "123456" | passwd --stdin $UNAME &>/dev/null
+    [$? -eq 0] && echo "${UNAME} create success"
+done
+
+# 筛选单词
+echo "xxx xx xxxxx" | awk -F "[ ,.]" "{for(i=1;i<=NF;i++){if(length($i)>3){print $i}}}"
+
+# 单词及字母去重排序(但单词出现频率降序，取前10条)
+awk -F "[,. ]+" '{for(i=1;i<==NF;i++)S[$i]++}END{for(key in S)print S[key],key}' xx.txt | sort -rn | head
+
+# 扫描网络内存活主机
+count=0
+for i in 192.168.58.{1..254}
+do
+    receive = $(ping $i -c 2 | awk 'NR==6{print $4}')
+    if [$receive -gt 0]
+    then
+        echo "${i} online"
+        let count++
+    else
+       echo  "${i} offline"
+    fi
+done
+echo "online:${count}"
+
+# Mysql分库备份
+user=root
+pass=root
+backfile=/root/mysql/backup
+[! -d $backfile] && mkdir -p $backfile
+cmd="mysql -u${user} -p{pass}"
+dump="mysqldump -u$user -p$pass"
+dblist="$cmd -e 'show databases;' 2>/dev/null | sed 1d | egrep -v '_schema|mysql' "
+for db_name in $dblist
+do 
+    printf "%s" ${db_name}
+    $dump ${db_name} 2>/dev/null | gzip>${backfile}/${db_name}_$(date+%m%d).sql.gz
+    printf "done:%S" ${db_name}
+done
+echo "done!"
+
+# Mysql分库分表备份
+user=root
+pass=root
+backfile=/root/mysql/backup
+[! -d $backfile] && mkdir -p $backfile
+cmd="mysql -u${user} -p{pass}"
+dump="mysqldump -u$user -p$pass"
+dblist="$cmd -e 'show databases;' 2>/dev/null | sed 1d | egrep -v '_schema|mysql' "
+for db_name in $dblist
+do 
+    printf "%s" ${db_name}
+    tables = `mysql -u$user -p$pass -e"use $db_name;show tables;" 2>/dev/null | sed 1d`
+    for j in $stables
+    do
+        printf "%s %s" ${db_name} ${j}
+        $dump -B --databases $db_name --tables $j 2>/dev/null > ${backfile}/${db_name}-${j}-`date+%m%d`.sql
+        printf "done"
+    done
+    printf "%s" ${db_name}
+done
+echo "done!"
