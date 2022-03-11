@@ -1,0 +1,5 @@
+@import './moduleA.css';
+
+body{
+    background-color: black;
+}

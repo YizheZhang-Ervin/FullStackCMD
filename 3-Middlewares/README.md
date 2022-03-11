@@ -1,0 +1,41 @@
+# DevOps_Middlewares
+
+## 开发Development
+  - Redis+Jedis+Redission
+  - Kafka
+  - Zookeeper
+  - Mysql
+  - Seata
+  - Canal
+  - Neo4j
+  - Elasticsearch
+  - Spark
+  - Hdfs+Hadoop
+
+## 运维部署Operation
+### Cache
+  - Memcache
+  - Redis
+### CoordinateService
+  - Zookeeper(空)
+### Database
+  - MongoDB
+  - Mysql
+  - Neo4j(空)
+  - Flyway数据迁移(空)
+  - Sqlite
+### MessageQueue
+  - Kafka
+  - RocketMQ(空)
+### Monitor&Log&Tracing
+  - EFK日志采集(空)
+  - Prometheus&Grafana(空)
+  - Zabbix(空)
+  - Skywalking(空)
+### Proxy
+  - Haproxy
+  - Nginx
+### WebServer
+  - Tomcat(空)
+  - uWSGI
+  - WebLogic(空)

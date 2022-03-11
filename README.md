@@ -39,7 +39,6 @@
 - Tools: Mybatis/Canal
 
 ## Data
-
 - Macheine Learning: keras/tensorflow
 - Big Data: spark/hadoop/flink/hive/hdfs/sqoop
 - Python Scrawller: Scrapy+Selenium/Requests+BeautifulSoup
@@ -49,16 +48,18 @@
 - 商务智能: SPSS/SSAS+SSIS+SSRS/Tableau/powerBI
 
 ## Product
-
 - 原型设计: Axure RP/Figma/Adobe XD
 - 思维导图: Mind Manager
 - Office
 
 ## Test
-- Selenium
-- 接口测试： postman
-## DevOps
+- postman接口测试
+- Junit单元测试
+- SonarQube代码质量检查
+- Jmeter接口&性能测试
+- Selenium前端测试
 
+## DevOps
 - Linux Shell
 - 打包: Docker
 - 自动化部署: Kubernetes
@@ -66,3 +67,5 @@
 - 自动化运维: Ansible
 - java诊断工具: Arthas
 - 版本控制: git
+- 前端打包: Webpack
+- 仓库: Maven/Npm/Pypi
